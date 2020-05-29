@@ -1,9 +1,14 @@
 const express = require('express');
-const { getTickets, getTicket } = require('../Controllers/tickets');
+const {
+  getTickets,
+  getTicket,
+  createTicket,
+  updateTicket,
+} = require('../Controllers/tickets');
 
 const router = express.Router();
 
-router.route('/').get(getTickets);
+router.route('/').get(getTickets).post(createTicket);
 
 router.route('/:id').get(getTicket);
 

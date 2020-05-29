@@ -1,0 +1,20 @@
+[
+  {
+    "ticket": {
+      "name": "Tuttle - Crisman - 38 - WEBIOTIC Transport",
+      "price": 89,
+      "departure": "2020-06-06T12:10:00+0000",
+      "arrival": "2020-06-06T18:45:00+0000"
+    },
+    "availableTickets": 12
+  },
+  {
+    "ticket": {
+      "name": "Venice - Deputy - 34 - SAVVY Transport",
+      "price": 428,
+      "departure": "2020-06-04T09:00:00+0000",
+      "arrival": "2020-06-04T10:00:00+0000"
+    },
+    "availableTickets": 16
+  }
+]

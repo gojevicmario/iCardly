@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
 const connectDB = require('./Config/Dev/db');
+const errorHandler = require('./Middleware/error');
 
 //Load environment variables
 dotenv.config({ path: './Config/Dev/config.env' });
@@ -24,6 +25,8 @@ if (process.env.NODE_ENV === 'dev') {
 
 //Mount routers
 app.use('/api/v1/tickets', tickets);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 

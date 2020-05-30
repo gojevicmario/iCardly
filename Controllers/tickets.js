@@ -1,6 +1,8 @@
 const ErrorResponse = require('../Helpers/errorResponse');
 const asyncHandler = require('../Middleware/async');
 const Ticket = require('../Models/Ticket');
+const TicketWarehouse = require('../Models/TicketWarehouse');
+const Order = require('../Models/Order');
 const advancedResults = require('../Middleware/advancedResults');
 
 // @Description      Get all tickets
@@ -41,8 +43,15 @@ exports.createTicket = asyncHandler(async (req, res, next) => {
 // @Route            POST /api/v1/tickets/:id/buy
 // @Access           Loggedin users only
 exports.buyTicket = asyncHandler(async (req, res, next) => {
+  let cardNumber = req.body.cardNumber;
+  if (!cardNumber) {
+    next(new ErrorResponse(`Card number is required for purchase!`, 400));
+  }
+
+  const order = await Order.create(req.body);
+
   res.status(500).json({
     success: false,
-    data: 'not  yet implemented'
+    data: order
   });
 });

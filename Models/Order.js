@@ -11,8 +11,8 @@ const OrderSchema = new mongoose.Schema({
     required: true
   },
   user: {
-    type: String,
-    default: 'štef',
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
     required: true
   },
   createdAt: {
@@ -21,30 +21,31 @@ const OrderSchema = new mongoose.Schema({
   }
 });
 
-OrderSchema.pre('save', async function(next) {
-  //scalability, više requestova u isto vrijeme???
-  let availableTickets = (
-    await this.model('TicketWarehouse').findOne({
-      ticket: this.ticket
-    })
-  ).availableTickets;
+// OrderSchema.pre('save', async function(next) {
+//   //scalability, više requestova u isto vrijeme???
+//   console.log('hmmm');
+//   let availableTickets = (
+//     await this.model('TicketWarehouse').findOne({
+//       ticket: this.ticket
+//     })
+//   ).availableTickets;
 
-  if (availableTickets === 0) {
-    new ErrorResponse(`This line is soldout`, 403);
-  }
+//   if (availableTickets === 0) {
+//     new ErrorResponse(`This line is soldout`, 403);
+//   }
 
-  await this.model('TicketWarehouse').findOneAndUpdate(
-    { ticket: this.ticket },
-    {
-      //mora biti neki bolji način
-      availableTickets: --availableTickets
-    },
-    { new: true }
-  );
-  console.log(
-    `User: ${this.user} just bought ticket: ${this.ticket} timestamp:${this.purchasedOn}`
-  );
-  next();
-});
+//   await this.model('TicketWarehouse').findOneAndUpdate(
+//     { ticket: this.ticket },
+//     {
+//       //mora biti neki bolji način
+//       availableTickets: --availableTickets
+//     },
+//     { new: true }
+//   );
+//   console.log(
+//     `User: ${this.user} just bought ticket: ${this.ticket} timestamp:${this.purchasedOn}`
+//   );
+//   next();
+// });
 
 module.exports = mongoose.model('Order', OrderSchema);

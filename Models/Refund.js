@@ -12,8 +12,8 @@ const OrderSchema = new mongoose.Schema({
     required: true
   },
   user: {
-    type: String,
-    default: 'štef',
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
     required: true
   },
   createdAt: {

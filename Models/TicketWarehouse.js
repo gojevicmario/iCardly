@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const TicketWarehouseSchema = new mongoose.Schema({
+  _id: {
+    type: mongoose.Schema.ObjectId,
+    select: false
+  },
   ticket: {
     type: mongoose.Schema.ObjectId,
     ref: 'Ticket',

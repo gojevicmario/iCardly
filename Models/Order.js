@@ -15,9 +15,9 @@ const OrderSchema = new mongoose.Schema({
     default: 'štef',
     required: true
   },
-  purchasedOn: {
+  createdAt: {
     type: Date,
-    default: new Date()
+    default: Date.now
   }
 });
 

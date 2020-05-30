@@ -1,1 +1,18 @@
-[{}]
+[
+  {
+    "ticket": "5ed20d86f21cb5a012470ac7",
+    "availableTickets": 20
+  },
+  {
+    "ticket": "5ed20d94d0986994935e6a00",
+    "availableTickets": 16
+  },
+  {
+    "ticket": "5ed20dfa817acd4c20987a31",
+    "availableTickets": 10
+  },
+  {
+    "ticket": "5ed20dfe7974408ecd50307f",
+    "availableTickets": 86
+  }
+]

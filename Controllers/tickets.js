@@ -48,10 +48,18 @@ exports.buyTicket = asyncHandler(async (req, res, next) => {
     next(new ErrorResponse(`Card number is required for purchase!`, 400));
   }
 
+  req.body.ticket = req.params.id;
+
+  if (!(await Ticket.exists({ _id: req.body.ticket }))) {
+    next(new ErrorResponse(`invalid ticketId`, 400));
+  }
+
+  req.body.user = req.user.id;
+
   const order = await Order.create(req.body);
 
-  res.status(500).json({
-    success: false,
+  res.status(200).json({
+    success: true,
     data: order
   });
 });

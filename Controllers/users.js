@@ -20,19 +20,25 @@ exports.getTickets = asyncHandler(async (req, res, next) => {
 // @Access           logged in user only
 // @LifeProTip       Would probably be smarter to have an orders controller for buying/refunding
 exports.refundTicket = asyncHandler(async (req, res, next) => {
-  const order = await Order.findById(req.params.orderId);
+  const order = await Order.findOne({
+    ticket: req.params.ticketId,
+    user: req.user.id
+  });
 
   if (!order) {
     throw new ErrorResponse('Ticket refund failed');
   }
 
-  const ticketId = order.ticket;
-  const ticket = await Ticket.findOne({ _id: ticketId });
+  const ticket = await Ticket.findOne({ _id: req.params.ticketId });
+
+  if (!ticket) {
+    throw new ErrorResponse('Ticket not found');
+  }
 
   var timeLeftToDeparture = Math.abs(
     moment(Date.now()).diff(ticket.departure, 'hours', true)
   );
-  console.log(timeLeftToDeparture);
+
   if (timeLeftToDeparture < 1) {
     throw new ErrorResponse(
       `The departure time is less than an hours. Operation not allowed.`,
@@ -42,7 +48,7 @@ exports.refundTicket = asyncHandler(async (req, res, next) => {
 
   await Order.deleteOne(order);
   await TicketWarehouse.findOneAndUpdate(
-    { ticket: ticketId },
+    { ticket: req.params.ticketId },
     {
       $inc: {
         availableTickets: 1

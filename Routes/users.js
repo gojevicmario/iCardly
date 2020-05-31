@@ -9,6 +9,6 @@ const router = express.Router();
 const { protect } = require('../Middleware/auth');
 
 router.route('/tickets').get(protect, getTickets);
-router.route('/tickets/:orderId/refund').post(protect, refundTicket);
+router.route('/tickets/:ticketId/refund').post(protect, refundTicket);
 
 module.exports = router;

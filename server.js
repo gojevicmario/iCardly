@@ -22,6 +22,7 @@ connectDB();
 //Route files
 const tickets = require('./Routes/tickets');
 const auth = require('./Routes/auth');
+const users = require('./Routes/users');
 
 const app = express();
 
@@ -47,6 +48,7 @@ if (process.env.NODE_ENV === 'dev') {
 //Mount routers
 app.use('/api/v1/tickets', tickets);
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/user', users);
 
 app.use(errorHandler);
 

@@ -16,7 +16,7 @@ const OrderSchema = new mongoose.Schema({
     ref: 'user',
     required: true
   },
-  createdAt: {
+  purchasedAt: {
     type: Date,
     default: Date.now
   }
@@ -24,29 +24,50 @@ const OrderSchema = new mongoose.Schema({
 
 OrderSchema.pre('save', async function(next) {
   //scalability, više requestova u isto vrijeme???
-  let availableTickets = (
-    await this.model('TicketWarehouse').findOne({
-      ticket: this.ticket
-    })
-  ).availableTickets;
 
-  if (availableTickets === 0) {
+  if (
+    (await this.model('TicketWarehouse')
+      .findOne({
+        ticket: this.ticket
+      })
+      .select('availableTickets')) === 0
+  ) {
     throw new ErrorResponse(`This line is soldout`, 403);
   }
 
   await this.model('TicketWarehouse').findOneAndUpdate(
     { ticket: this.ticket },
     {
-      //mora biti neki bolji način
-      availableTickets: --availableTickets
+      $inc: {
+        availableTickets: -1
+      }
     },
     { new: true }
   );
   console.log(
-    `User: ${this.user} just bought ticket: ${this.ticket} timestamp:${this.createdAt}`
+    `User: ${this.user} just bought ticket: ${this.ticket} timestamp:${this.purchasedAt}`
       .yellow
   );
   next();
 });
+
+// OrderSchema.post('deleteOne', async function(order, next) {
+//   console.log('dokumnet'.red);
+//   console.log(order);
+//   await this.model('TicketWarehouse').findOneAndUpdate(
+//     { ticket: ObjectId(order.ticket) },
+//     {
+//       $inc: {
+//         availableTickets: 1
+//       }
+//     },
+//     { new: true }
+//   );
+//   console.log(
+//     `User: ${this.user} just refunded ticket: ${this.ticket} timestamp:${this.purchasedAt}`
+//       .blue
+//   );
+//   next();
+// });
 
 module.exports = mongoose.model('Order', OrderSchema);

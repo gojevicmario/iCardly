@@ -44,16 +44,27 @@ exports.createTicket = asyncHandler(async (req, res, next) => {
 // @Access           Loggedin users only
 exports.buyTicket = asyncHandler(async (req, res, next) => {
   let cardNumber = req.body.cardNumber;
-  if (!cardNumber) {
-    next(new ErrorResponse(`Card number is required for purchase!`, 400));
+  if (!cardNumber || cardNumber.length !== 16) {
+    //na produ neki regex za provjeru kartice ili npm
+    throw new ErrorResponse(
+      `A valid card number is required for purchase!`,
+      400
+    );
   }
-
-  //Provjeri još jeli broj kartice ispravan(ne sadrzi slova itd.)
 
   req.body.ticket = req.params.id;
 
   if (!(await Ticket.exists({ _id: req.body.ticket }))) {
-    next(new ErrorResponse(`invalid ticketId`, 400));
+    throw new ErrorResponse(`invalid ticketId`, 400);
+  }
+
+  if (
+    (await Order.find({
+      user: req.user.id,
+      ticket: req.body.ticket
+    }).countDocuments()) > 0
+  ) {
+    throw new ErrorResponse(`You have already purchased this ticket`, 400);
   }
 
   req.body.user = req.user.id;

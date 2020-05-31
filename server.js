@@ -5,6 +5,7 @@ const colors = require('colors');
 const connectDB = require('./Config/Dev/db');
 const errorHandler = require('./Middleware/error');
 const cookieParser = require('cookie-parser');
+const mongoSanizite = require('express-mongo-sanitize');
 
 //Load environment variables
 dotenv.config({ path: './Config/Dev/config.env' });
@@ -21,6 +22,7 @@ const app = express();
 //Body parser
 app.use(express.json());
 app.use(cookieParser());
+app.use(mongoSanizite());
 
 if (process.env.NODE_ENV === 'dev') {
   app.use(morgan('dev'));

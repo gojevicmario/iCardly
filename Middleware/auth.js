@@ -13,6 +13,8 @@ exports.protect = asyncHandler(async (req, res, next) => {
     //Podjsetnik samom sebi na startsWiTch koji mi je tu uzeo previše vremena. Živio typescript
   ) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.token) {
+    token = req.cookies.token;
   }
 
   if (!token) {

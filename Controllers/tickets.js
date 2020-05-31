@@ -48,6 +48,8 @@ exports.buyTicket = asyncHandler(async (req, res, next) => {
     next(new ErrorResponse(`Card number is required for purchase!`, 400));
   }
 
+  //Provjeri još jeli broj kartice ispravan(ne sadrzi slova itd.)
+
   req.body.ticket = req.params.id;
 
   if (!(await Ticket.exists({ _id: req.body.ticket }))) {

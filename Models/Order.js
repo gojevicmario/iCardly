@@ -31,7 +31,7 @@ OrderSchema.pre('save', async function(next) {
   ).availableTickets;
 
   if (availableTickets === 0) {
-    next(new ErrorResponse(`This line is soldout`, 403));
+    throw new ErrorResponse(`This line is soldout`, 403);
   }
 
   await this.model('TicketWarehouse').findOneAndUpdate(

@@ -4,7 +4,7 @@
   "description": "Ticketing system for Ars Futura",
   "main": "server.js",
   "scripts": {
-    "start": "SET NODE_ENV=production node server",
+    "start": "NODE_ENV=production node server",
     "dev": "nodemon server"
   },
   "author": "Mario Gojevic",

@@ -27,18 +27,6 @@ exports.getTicket = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: ticket });
 });
 
-// @Description      Creates single ticket
-// @Route            POST /api/v1/tickets
-// @Access           Public but in a real world Transport company
-exports.createTicket = asyncHandler(async (req, res, next) => {
-  const ticket = await Ticket.create(req.body);
-
-  res.status(201).json({
-    success: true,
-    data: ticket
-  });
-});
-
 // @Description      Buy a single ticket
 // @Route            POST /api/v1/tickets/:id/buy
 // @Access           Loggedin users only

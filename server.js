@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
@@ -41,6 +42,8 @@ const limiter = rateLimit({
 app.use(limiter);
 app.use(hpp());
 app.use(cors());
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 if (process.env.NODE_ENV === 'dev') {
   app.use(morgan('dev'));

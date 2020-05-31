@@ -2,10 +2,16 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
-const connectDB = require('./Config/Dev/db');
 const errorHandler = require('./Middleware/error');
 const cookieParser = require('cookie-parser');
 const mongoSanizite = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const xss = require('xss-clean');
+const rateLimit = require('express-rate-limit');
+const hpp = require('hpp');
+const cors = require('cors');
+
+const connectDB = require('./Config/Dev/db');
 
 //Load environment variables
 dotenv.config({ path: './Config/Dev/config.env' });
@@ -19,10 +25,20 @@ const auth = require('./Routes/auth');
 
 const app = express();
 
-//Body parser
+//register middelware
 app.use(express.json());
 app.use(cookieParser());
 app.use(mongoSanizite());
+app.use(helmet());
+app.use(xss());
+
+const limiter = rateLimit({
+  windowMs: process.env.RATE_LIMITER_TIME,
+  max: process.env.RATE_LIMITER_NUMBER_OF_REQUESTS
+});
+app.use(limiter);
+app.use(hpp());
+app.use(cors());
 
 if (process.env.NODE_ENV === 'dev') {
   app.use(morgan('dev'));
